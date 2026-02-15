@@ -1,5 +1,3 @@
-# Ignorar el entorno virtual y el cache
-
 venv/
 __pycache__/
 
