@@ -16,6 +16,7 @@ class Game:
         # Estado dinámico
         self.bullets = 0
         self.contador = 0  # contador de frames
+        self.score = 0  # puntaje del jugador
 
         #Imagen
         self.bullets_image = image
@@ -74,13 +75,27 @@ class Game:
         # Label de nivel
         level_label = self.font.render(f'Nivel: {self.nivel}', True, (255, 255, 255))
         self.window.blit(level_label, (10, 90))
+
+        # Puntaje
+        score_label = self.font.render(f'Puntaje: {self.score}', True, (255, 255, 0))
+        self.window.blit(score_label, (10, 50))
         
         # Label de tiempo de juego (en frames)
         tiempo_segundos = self.contador // self.fps
         tiempo_label = self.font.render(f'Tiempo: {tiempo_segundos}s', True, (255, 255, 255))
         self.window.blit(tiempo_label, (self.screen_width - 200, 10))
 
-        for i in range(self.bullets):
-            offset += self.bullets_image.get_width()
-            self.window.blit(self.bullets_image,(self.screen_width-offset,self.screen_height-50))
+        # Mostrar icono de munición escalado y contador numérico
+        try:
+            icon_size = (28, 28)
+            ammo_icon = pygame.transform.scale(self.bullets_image, icon_size)
+            icon_x = self.screen_width - 140
+            icon_y = self.screen_height - 50
+            self.window.blit(ammo_icon, (icon_x, icon_y))
+            ammo_text = self.font.render(f'x {self.bullets}', True, (255, 255, 255))
+            self.window.blit(ammo_text, (icon_x + icon_size[0] + 8, icon_y))
+        except Exception:
+            # Fallback: mostrar solo número si no hay imagen
+            ammo_text = self.font.render(f'Ammo: {self.bullets}', True, (255, 255, 255))
+            self.window.blit(ammo_text, (self.screen_width - 200, self.screen_height - 50))
 

@@ -26,8 +26,16 @@ class Player(ShipClass):
         super().__init__(x, y, health)
         
         # Asignar las imágenes pasadas como parámetros
-        self.ship_img = ship_img
-        self.bullet_img = bullet_img
+        # Forzar tamaño de la nave a 128x128 para consistencia visual y de colisiones
+        try:
+            self.ship_img = pygame.transform.scale(ship_img, (128, 128))
+        except Exception:
+            self.ship_img = ship_img
+        try:
+            # mantener tamaño razonable para las balas si se proporcionó una imagen
+            self.bullet_img = pygame.transform.scale(bullet_img, (max(4, bullet_img.get_width()), max(8, bullet_img.get_height())))
+        except Exception:
+            self.bullet_img = bullet_img
         
         # Velocidad de desplazamiento del jugador
         self.player_speed = 5  # Píxeles por frame
@@ -36,7 +44,7 @@ class Player(ShipClass):
         self.x_speed = self.player_speed  # Velocidad horizontal (positivo = derecha)
         self.y_speed = self.player_speed  # Velocidad vertical (positivo = abajo)
         
-        # Crear máscara de colisión basada en la imagen de la nave
+        # Crear máscara de colisión basada en la imagen de la nave (después del escalado)
         # Esto permite detectar colisiones más precisas (pixel-perfect)
         self.mask = pygame.mask.from_surface(self.ship_img)
         
@@ -187,6 +195,11 @@ class Player(ShipClass):
                         try:
                             enemies.remove(enemy)
                         except ValueError:
+                            pass
+                        # incrementar puntaje al eliminar enemigo
+                        try:
+                            game.score += 100
+                        except Exception:
                             pass
                     # Registrar kill para el contador del powerup
                     self._record_kill()
