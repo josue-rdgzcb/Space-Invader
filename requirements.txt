@@ -1,8 +1,6 @@
 PySimpleGUI
-tk
 pygame
+pytest
 
-# Para instalar
-'''
-pip install -r requirements.txt
-'''
+# Para instalar:
+#   pip install -r requirements.txt
